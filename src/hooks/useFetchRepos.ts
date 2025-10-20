@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchRepositories } from '../api/github';
+
+import { fetchRepositories } from '../api/githubAPI';
 import { useAppStore } from '../store/useAppStore';
 
 export function useFetchRepos() {
