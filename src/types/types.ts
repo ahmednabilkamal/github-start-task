@@ -8,3 +8,12 @@ export type AppState = {
   setCreatedFrom: (cForm: string) => void;
   toggleTheme: () => void;
 };
+
+export interface Repo {
+  id: number;
+  full_name: string;
+  html_url: string;
+  stargazers_count: number;
+  language: string | null;
+  created_at: string;
+}
