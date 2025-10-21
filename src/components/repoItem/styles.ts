@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16,
     marginBottom: 6,
-    fontFamily: fonts.bold,
+    fontFamily: fonts.italic,
   },
 });
 

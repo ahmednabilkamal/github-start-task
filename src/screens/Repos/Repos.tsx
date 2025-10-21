@@ -1,20 +1,14 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  FlatList,
-  Text,
-  TouchableOpacity,
-  ScrollView,
-} from 'react-native';
+import { View, StyleSheet, FlatList, Text } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Loader, RepoItem } from '../../components';
+import { FilterItem, Loader, RepoItem } from '../../components';
 import { useFetchRepos } from '../../hooks/useFetchRepos';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../redux/reducers';
 import { setTop, setLanguage } from '../../redux/actions/action';
 import { languageOptions, topOptions } from '../../constants';
+import { fonts } from '../../fonts';
 
 const Repos = () => {
   const dispatch = useDispatch();
@@ -33,73 +27,42 @@ const Repos = () => {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.filterSection}>
         <Text style={[styles.label, { color: baseTextColor }]}>Show top:</Text>
-
-        <View style={styles.buttonRow}>
-          {topOptions.map(value => {
-            const isActive = top === value;
-            return (
-              <TouchableOpacity
-                key={value}
-                style={[
-                  styles.optionButton,
-                  {
-                    backgroundColor: isActive
-                      ? colors.primary
-                      : colors.cardBackground || '#ffffff',
-                    borderColor: colors.primary,
-                  },
-                ]}
-                onPress={() => dispatch(setTop(value))}
-              >
-                <Text
-                  style={{
-                    color: isActive ? '#fff' : baseTextColor,
-                    fontWeight: isActive ? '700' : '500',
-                  }}
-                >
-                  {`Top ${value}`}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+        <FlatList
+          data={topOptions}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={item => item.toString()}
+          contentContainerStyle={styles.buttonRow}
+          renderItem={({ item: value }) => (
+            <FilterItem
+              label={`Top ${value}`}
+              isActive={top === value}
+              onPress={() => dispatch(setTop(value))}
+              baseTextColor={baseTextColor}
+            />
+          )}
+        />
       </View>
 
       <View style={styles.filterSection}>
         <Text style={[styles.label, { color: baseTextColor }]}>Language:</Text>
-        <ScrollView
+
+        <FlatList
+          data={languageOptions}
           horizontal
           showsHorizontalScrollIndicator={false}
+          keyExtractor={item => item}
           contentContainerStyle={styles.buttonRow}
-        >
-          {languageOptions.map(lang => {
-            const isActive = language === lang;
-            return (
-              <TouchableOpacity
-                key={lang}
-                style={[
-                  styles.optionButton,
-                  {
-                    backgroundColor: isActive
-                      ? colors.primary
-                      : colors.cardBackground || '#eee',
-                    borderColor: colors.primary,
-                  },
-                ]}
-                onPress={() => dispatch(setLanguage(lang))}
-              >
-                <Text
-                  style={{
-                    color: isActive ? '#fff' : baseTextColor,
-                    fontWeight: isActive ? '700' : '500',
-                  }}
-                >
-                  {lang}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </ScrollView>
+          renderItem={({ item: lang }) => (
+            <FilterItem
+              key={lang}
+              label={lang}
+              isActive={language === lang}
+              onPress={() => dispatch(setLanguage(lang))}
+              baseTextColor={baseTextColor}
+            />
+          )}
+        />
       </View>
 
       <FlatList
@@ -114,30 +77,18 @@ const Repos = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 10,
-  },
-  filterSection: {
-    marginBottom: 16,
-  },
+  container: { flex: 1, padding: 10 },
+  filterSection: { marginBottom: 16 },
   label: {
     fontSize: 16,
     fontWeight: '600',
     marginBottom: 8,
+    fontFamily: fonts.bold,
   },
   buttonRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: 8,
-  },
-  optionButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 14,
-    borderWidth: 1.5,
-    borderRadius: 20,
-    marginRight: 8,
-    marginBottom: 8,
   },
 });
 
