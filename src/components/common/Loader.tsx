@@ -1,10 +1,9 @@
 import React from 'react';
 import { ActivityIndicator, View, StyleSheet } from 'react-native';
-
-import { useThemeStore } from '../../store/useThemeStore';
+import { useTheme } from '../../hooks/useTheme';
 
 const Loader = () => {
-  const { colors } = useThemeStore();
+  const { colors } = useTheme();
 
   return (
     <View style={styles.container}>

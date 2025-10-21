@@ -2,12 +2,12 @@ import React from 'react';
 import { TouchableOpacity, Linking, Text } from 'react-native';
 import moment from 'moment';
 
-import { useThemeStore } from '../../store/useThemeStore';
 import { Repo } from '../../types/types';
 import styles from './styles';
+import { useTheme } from '../../hooks/useTheme';
 
 const RepoItem: React.FC<{ repo: Repo }> = ({ repo }) => {
-  const { colors } = useThemeStore();
+  const { colors } = useTheme();
 
   return (
     <TouchableOpacity

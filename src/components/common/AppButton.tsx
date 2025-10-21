@@ -1,8 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet } from 'react-native';
-
-import { useThemeStore } from '../../store/useThemeStore';
+import { useTheme } from '../../hooks/useTheme';
 
 type Props = {
   title: string;
@@ -11,7 +10,7 @@ type Props = {
 };
 
 const AppButton: React.FC<Props> = ({ title, onPress, disabled }) => {
-  const { colors } = useThemeStore();
+  const { colors } = useTheme();
 
   return (
     <TouchableOpacity
