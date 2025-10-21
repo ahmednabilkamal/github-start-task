@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native';
+import { fonts } from '../../fonts';
 
 const styles = StyleSheet.create({
   card: {
@@ -10,6 +11,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     fontSize: 16,
     marginBottom: 6,
+    fontFamily: fonts.bold,
   },
 });
 
