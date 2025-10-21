@@ -17,10 +17,10 @@ const RepoItem: React.FC<{ repo: Repo }> = ({ repo }) => {
       <Text style={[styles.name, { color: colors.textPrimary }]}>
         {repo.full_name}
       </Text>
-      <Text style={{ color: colors.textSecondary }}>
+      <Text style={{ color: colors.textPrimary }}>
         ⭐ {repo.stargazers_count}
       </Text>
-      <Text style={{ color: colors.textSecondary }}>
+      <Text style={{ color: colors.textPrimary }}>
         Created: {moment(repo.created_at).format('YYYY-MM-DD')}
       </Text>
 

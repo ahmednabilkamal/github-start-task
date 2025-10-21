@@ -14,23 +14,26 @@ import { useFetchRepos } from '../../hooks/useFetchRepos';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../redux/reducers';
 import { setTop, setLanguage } from '../../redux/actions/action';
+import { languageOptions, topOptions } from '../../constants';
 
 const Repos = () => {
   const dispatch = useDispatch();
   const { top, language } = useSelector((state: RootState) => state.app);
   const { data, isLoading, error } = useFetchRepos();
   const { colors } = useTheme();
+  const themeMode = useSelector((state: RootState) => state.theme.theme);
+  const isLight = themeMode === 'light';
 
   if (isLoading) return <Loader />;
   if (error) return <Loader />;
 
-  const topOptions = [10, 50, 100];
-  const languageOptions = ['JavaScript', 'TypeScript', 'Python', 'Java', 'Go'];
+  const baseTextColor = isLight ? '#000000' : '#ffffff';
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.filterSection}>
-        <Text style={[styles.label, { color: colors.text }]}>Show top:</Text>
+        <Text style={[styles.label, { color: baseTextColor }]}>Show top:</Text>
+
         <View style={styles.buttonRow}>
           {topOptions.map(value => {
             const isActive = top === value;
@@ -40,7 +43,9 @@ const Repos = () => {
                 style={[
                   styles.optionButton,
                   {
-                    backgroundColor: isActive ? colors.primary : 'transparent',
+                    backgroundColor: isActive
+                      ? colors.primary
+                      : colors.cardBackground || '#ffffff',
                     borderColor: colors.primary,
                   },
                 ]}
@@ -48,7 +53,7 @@ const Repos = () => {
               >
                 <Text
                   style={{
-                    color: isActive ? colors.buttonText || '#fff' : colors.text,
+                    color: isActive ? '#fff' : baseTextColor,
                     fontWeight: isActive ? '700' : '500',
                   }}
                 >
@@ -61,7 +66,7 @@ const Repos = () => {
       </View>
 
       <View style={styles.filterSection}>
-        <Text style={[styles.label, { color: colors.text }]}>Language:</Text>
+        <Text style={[styles.label, { color: baseTextColor }]}>Language:</Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -75,7 +80,9 @@ const Repos = () => {
                 style={[
                   styles.optionButton,
                   {
-                    backgroundColor: isActive ? colors.primary : 'transparent',
+                    backgroundColor: isActive
+                      ? colors.primary
+                      : colors.cardBackground || '#eee',
                     borderColor: colors.primary,
                   },
                 ]}
@@ -83,7 +90,7 @@ const Repos = () => {
               >
                 <Text
                   style={{
-                    color: isActive ? colors.buttonText || '#fff' : colors.text,
+                    color: isActive ? '#fff' : baseTextColor,
                     fontWeight: isActive ? '700' : '500',
                   }}
                 >
@@ -107,9 +114,18 @@ const Repos = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 10 },
-  filterSection: { marginBottom: 12 },
-  label: { fontSize: 16, fontWeight: '600', marginBottom: 6 },
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  filterSection: {
+    marginBottom: 16,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 8,
+  },
   buttonRow: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -121,7 +137,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderRadius: 20,
     marginRight: 8,
-    marginBottom: 6,
+    marginBottom: 8,
   },
 });
 
