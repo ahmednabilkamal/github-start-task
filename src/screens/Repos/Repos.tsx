@@ -5,6 +5,7 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
+  ScrollView,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -12,26 +13,26 @@ import { Loader, RepoItem } from '../../components';
 import { useFetchRepos } from '../../hooks/useFetchRepos';
 import { useTheme } from '../../hooks/useTheme';
 import { RootState } from '../../redux/reducers';
-import { setTop } from '../../redux/actions/action';
+import { setTop, setLanguage } from '../../redux/actions/action';
 
 const Repos = () => {
   const dispatch = useDispatch();
-  const { top } = useSelector((state: RootState) => state.app);
+  const { top, language } = useSelector((state: RootState) => state.app);
   const { data, isLoading, error } = useFetchRepos();
   const { colors } = useTheme();
 
   if (isLoading) return <Loader />;
   if (error) return <Loader />;
 
-  const options = [10, 50, 100];
+  const topOptions = [10, 50, 100];
+  const languageOptions = ['JavaScript', 'TypeScript', 'Python', 'Java', 'Go'];
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.filterContainer}>
+      <View style={styles.filterSection}>
         <Text style={[styles.label, { color: colors.text }]}>Show top:</Text>
-
-        <View style={styles.buttonsContainer}>
-          {options.map(value => {
+        <View style={styles.buttonRow}>
+          {topOptions.map(value => {
             const isActive = top === value;
             return (
               <TouchableOpacity
@@ -59,6 +60,41 @@ const Repos = () => {
         </View>
       </View>
 
+      <View style={styles.filterSection}>
+        <Text style={[styles.label, { color: colors.text }]}>Language:</Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.buttonRow}
+        >
+          {languageOptions.map(lang => {
+            const isActive = language === lang;
+            return (
+              <TouchableOpacity
+                key={lang}
+                style={[
+                  styles.optionButton,
+                  {
+                    backgroundColor: isActive ? colors.primary : 'transparent',
+                    borderColor: colors.primary,
+                  },
+                ]}
+                onPress={() => dispatch(setLanguage(lang))}
+              >
+                <Text
+                  style={{
+                    color: isActive ? colors.buttonText || '#fff' : colors.text,
+                    fontWeight: isActive ? '700' : '500',
+                  }}
+                >
+                  {lang}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+      </View>
+
       <FlatList
         data={data}
         renderItem={({ item }) => <RepoItem repo={item} />}
@@ -72,15 +108,11 @@ const Repos = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 10 },
-  filterContainer: {
-    flexDirection: 'column',
-    marginBottom: 12,
-    gap: 8,
-  },
-  label: { fontSize: 16, fontWeight: '600' },
-  buttonsContainer: {
+  filterSection: { marginBottom: 12 },
+  label: { fontSize: 16, fontWeight: '600', marginBottom: 6 },
+  buttonRow: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexWrap: 'wrap',
     gap: 8,
   },
   optionButton: {
@@ -88,6 +120,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     borderWidth: 1.5,
     borderRadius: 20,
+    marginRight: 8,
+    marginBottom: 6,
   },
 });
 
