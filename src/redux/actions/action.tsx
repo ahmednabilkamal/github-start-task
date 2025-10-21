@@ -5,7 +5,7 @@ import {
   TOGGLE_THEME,
 } from '../types';
 
-export const setTopN = (top: number) => ({
+export const setTop = (top: number) => ({
   type: SET_TOP,
   payload: top,
 });

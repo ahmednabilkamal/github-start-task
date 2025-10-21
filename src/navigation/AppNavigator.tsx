@@ -1,23 +1,34 @@
 import React from 'react';
 import { TouchableOpacity } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  DarkTheme,
+} from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Icon } from 'react-native-elements';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { Repos } from '../screens';
-import { useDispatch } from 'react-redux';
 import { toggleTheme } from '../redux/actions/action';
-import { useTheme } from '../hooks/useTheme';
+import { RootState } from '../redux/reducers';
 
 const Stack = createStackNavigator();
 
 export const AppNavigator = () => {
-  const { theme } = useTheme();
   const dispatch = useDispatch();
+  const themeMode = useSelector((state: RootState) => state.theme.theme);
+  const isLight = themeMode === 'light';
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Repos">
+    <NavigationContainer theme={isLight ? DefaultTheme : DarkTheme}>
+      <Stack.Navigator
+        initialRouteName="Repos"
+        screenOptions={{
+          headerStyle: { backgroundColor: isLight ? '#fff' : '#000' },
+          headerTintColor: isLight ? '#000' : '#fff',
+        }}
+      >
         <Stack.Screen
           name="Repos"
           component={Repos}
@@ -29,11 +40,10 @@ export const AppNavigator = () => {
                 style={{ paddingRight: 10 }}
               >
                 <Icon
-                  name={theme === 'light' ? 'moon' : 'sun'}
+                  name={isLight ? 'moon' : 'sun'}
                   type="feather"
-                  color={'black'}
-                  size={22}
-                  onPress={() => dispatch(toggleTheme())}
+                  color={isLight ? '#000' : '#ffffff'}
+                  size={20}
                 />
               </TouchableOpacity>
             ),

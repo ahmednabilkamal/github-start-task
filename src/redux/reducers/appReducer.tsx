@@ -1,11 +1,15 @@
-import moment from 'moment';
-import { AppState } from '../types';
 import { SET_TOP, SET_LANGUAGE, SET_CREATED_FROM } from '../types';
 
+interface AppState {
+  top: number;
+  language: string;
+  createdFrom: string;
+}
+
 const initialState: AppState = {
-  top: 50,
-  language: 'TypeScript',
-  createdFrom: moment().subtract(1, 'year').format('YYYY-MM-DD'),
+  top: 10,
+  language: 'javascript',
+  createdFrom: '2024-01-01',
 };
 
 export const appReducer = (state = initialState, action: any): AppState => {
